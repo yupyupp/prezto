@@ -1,13 +1,47 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+# Start the gpg-agent if not already running
+if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
+  gpg-connect-agent /bye >/dev/null 2>&1
+fi
+
+# Set SSH to use gpg-agent
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+fi
+
+# Set GPG TTY
+export GPG_TTY=$(tty)
+
+# Refresh gpg-agent tty in case user switches into an X session
+gpg-connect-agent updatestartuptty /bye >/dev/null
+
+# Custom shell functions
+function smux(){
+    autossh -M $RANDOM $@ -t "tmux -u attach"
+}
+function rsed(){
+    find $1 -type f -exec sed -e $2 {} +
+}
+
+# Persistant remote connections
+alias smail='smux mail'
+alias irc='smux irc'
+
+# Development aliases
+alias valgrind='valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all '
+alias commit='git commit'
+alias pull='git pull'
+alias push='git push'
+alias status='git status'
+
+# Misc
+alias tmux='TERM=xterm-256color tmux -u'
+alias vim='nvim'
+alias ntvim='nvim -c "set noswapfile"'
+alias open='xdg-open'
+alias sl='/usr/bin/sl'
