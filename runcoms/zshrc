@@ -5,7 +5,7 @@ fi
 
 # Start the gpg-agent if not already running
 if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
-  gpg-connect-agent /bye >/dev/null 2>&1
+  gpg-connect-agent --daemon --use-standard-socket /bye >/dev/null 2>&1
 fi
 
 # Set SSH to use gpg-agent
@@ -24,6 +24,14 @@ gpg-connect-agent updatestartuptty /bye >/dev/null
 function smux(){
     autossh -M $RANDOM $@ -t "tmux -u attach"
 }
+function akhal(){
+    while : ; do
+        clear
+        khal agenda
+        sleep 15
+    done
+}
+
 function rsed(){
     find $1 -type f -exec sed -e $2 {} +
 }
@@ -41,7 +49,7 @@ alias status='git status'
 
 # Misc
 alias tmux='TERM=xterm-256color tmux -u'
-alias vim='nvim'
-alias ntvim='nvim -c "set noswapfile"'
+#alias vim='nvim'
+#alias ntvim='nvim -c "set noswapfile"'
 alias open='xdg-open'
 alias sl='/usr/bin/sl'

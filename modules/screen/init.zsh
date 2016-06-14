@@ -19,16 +19,8 @@ if [[ -z "$STY" && -z "$EMACS" && -z "$VIM" ]] && ( \
   ( [[ -n "$SSH_TTY" ]] && zstyle -t ':prezto:module:screen:auto-start' remote ) ||
   ( [[ -z "$SSH_TTY" ]] && zstyle -t ':prezto:module:screen:auto-start' local ) \
 ); then
-  session="$(
-    screen -list 2> /dev/null \
-      | sed '1d;$d' \
-      | awk '{print $1}' \
-      | head -1)"
-
-  if [[ -n "$session" ]]; then
-    exec screen -x "$session"
-  else
-    exec screen -a -A -U -D -R -m "$SHELL" -l
+  if [ -z "$TMUX" ]; then
+    exec screen -a -A -U -RR -l -T screen-256color "$SHELL"
   fi
 fi
 
@@ -36,7 +28,7 @@ fi
 # Aliases
 #
 
-alias scr='screen'
+alias scr='screen -U -T screen-256color'
 alias scrl='screen -list'
 alias scrn='screen -U -S'
 alias scrr='screen -a -A -U -D -R'

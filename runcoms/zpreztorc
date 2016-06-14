@@ -14,6 +14,7 @@ zstyle ':prezto:load' pmodule \
   'python' \
   'git' \
   'tmux' \
+  'screen' \
   'syntax-highlighting' \
   'prompt'
 zstyle ':prezto:module:editor' key-bindings 'vi'
@@ -25,6 +26,8 @@ zstyle ':prezto:module:terminal' auto-title 'yes'
 zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
 zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 zstyle ':prezto:module:tmux:auto-start' local 'no'
-zstyle ':prezto:module:tmux:auto-start' remote 'yes'
+zstyle ':prezto:module:tmux:auto-start' remote 'no'
+zstyle ':prezto:module:screen:auto-start' remote 'yes'
+#zstyle ':prezto:module:screen:auto-start' remote 'yes'
 # Integrate with iTerm2.
 # zstyle ':prezto:module:tmux:iterm' integrate 'yes'
